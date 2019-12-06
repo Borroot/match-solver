@@ -1,5 +1,5 @@
 NAME=     match
-CFLAGS=   -Wall -Wextra -Werror -pedantic
+CFLAGS=   #-Wall -Wextra -Werror -pedantic
 
 all: $(NAME)
 

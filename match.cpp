@@ -6,108 +6,108 @@
 
 using namespace std;
 
-typedef string T;
+#define NIL 0
+#define INF INT_MAX
 
-// Take a vector with elements of type T and print its contents.
+
+// Take a vector and print its contents.
+template <typename T>
 ostream &operator << (ostream &out, vector<T> &A)
 {
-	cerr << "[";
+	out << "[";
 	for (int i = 0; i < (int)A.size(); i++) {
-		cerr << A[i];
+		out << A[i];
 		if (i != (int)A.size() - 1) {
-			cerr << ",";
+			out << ",";
 		}
 	}
-	cerr << "]";
+	out << "]";
 	return out;
 }
 
-// Take in a vector A and an element e and check if e is in A.
-bool in (vector<T> &A, T e)
+void input_vertices (vector<string> &A)
 {
 	for (int i = 0; i < (int)A.size(); i++) {
-		if (A[i] == e) {
+		string vertex;
+		cin >> vertex;
+		A[i] = vertex;
+	}
+}
+
+void init_map (unordered_map<string,int> &map, const int &A_SIZE)
+{
+	vector<string> U(A_SIZE);
+	vector<string> V(A_SIZE);
+
+	input_vertices(U);
+	input_vertices(V);
+
+	// put all the elements of U and V in the map
+	for (int i = 0; i < A_SIZE; i++) {
+		map.insert({U[i], i});
+	}
+
+	for (int i = 0; i < A_SIZE; i++) {
+		map.insert({V[i], i + A_SIZE});
+	}
+}
+
+bool contains (vector<int> &vec, int elem)
+{
+	for (int i = 0; i < (int)vec.size(); i++) {
+		if (vec[i] == elem) {
 			return true;
 		}
 	}
 	return false;
 }
 
-// Take in a vector A and fill it with input from stdin.
-void input_vertices (vector<T> &A, const int &SIZE)
+void init_adj (vector<vector<int>> &adj, unordered_map<string,int> &map, const int &A_SIZE)
 {
-	for (int i = 0; i < (int)SIZE; i++) {
-		T vertex;
-		cin >> vertex;
-		A.push_back(vertex);
-	}
-}
+	string tmp; cin >> tmp;
+	int C_SIZE;
+	cin >> C_SIZE;
 
-// Take in a cast C and split it in elements from U and V which
-// will be stored in _U and _V respectively.
-void process_cast (vector<T> &C, vector<T> &_U, vector<T> &_V, vector<T> &U)
-{
-	for (int j = 0; j < (int)C.size(); j++) {
-		if (in(U, C[j])) {
-			_U.push_back(C[j]);
-		} else { // C[j] in V
-			_V.push_back(C[j]);
+	vector<int> U;
+	vector<int> V;
+
+	// read the cast of the movie
+	for (int i = 0; i < C_SIZE; i++) {
+		string vertex;
+		cin >> vertex;
+
+		int num = map.at(vertex);
+		if (num < A_SIZE) {
+			U.push_back(num); // in U
+		} else { 
+			V.push_back(num); // in V
 		}
 	}
-}
 
-// Take in a list U and a list V and for every element u in U add
-// everything from V to U's adjacency list (without making duplicates).
-void process_adjs (vector<T> &U, vector<T> &V, unordered_map<T,vector<T>> &adj)
-{
+	// update the adjacency list
 	for (int i = 0; i < (int)U.size(); i++) {
-		vector<T> &adj_Ui = adj.at(U[i]);
+		vector<int> &adj_Ui = adj.at(U[i]);
 
 		for (int j = 0; j < (int)V.size(); j++) {
-			if (!in(adj_Ui, V[j])) {
-				adj_Ui.push_back(V[j]);
+			if (!contains(adj_Ui, V[j])) {
+				adj_Ui.push_back(V[j]);	
 			}
 		}
 	}
 }
 
-// Take in a list U and a list V. Save the actresses in U and the actors in V.
-// Futhermore take in the adj list and save all the adjacents to every element from U here.
-void input (vector<T> &U, vector<T> &V, unordered_map<T,vector<T>> &adj, const int &A_SIZE)
+void input (vector<vector<int>> &adj, const int &A_SIZE)
 {
 	int M_SIZE;
 	cin >> M_SIZE;
 
-	input_vertices(U, A_SIZE);
-	input_vertices(V, A_SIZE);
-
-	for (int i = 0; i < A_SIZE; i++) {
-		vector<T> adj_Ui;
-		adj.insert({U[i], adj_Ui});
-	}
+	// map all names (strings) to unique integers
+	unordered_map<string,int> map;
+	init_map(map, A_SIZE);
 
 	for (int i = 0; i < M_SIZE; i++) {
-		T tmp; cin >> tmp;
-		int C_SIZE;
-		cin >> C_SIZE;
-
-		vector<T> C;
-		input_vertices(C, C_SIZE);
-
-		// split C in two lists _U and _V
-		vector<T> _U;
-		vector<T> _V;
-		process_cast(C, _U, _V, U);
-
-		// for all elems in _U add everything from _V to their adjs
-		process_adjs(_U, _V, adj);
+		init_adj(adj, map, A_SIZE);
 	}
-}
-
-int hopcroft_karp ()
-{
-
-	return 0;
 }
 
 int main ()
@@ -115,18 +115,18 @@ int main ()
 	int A_SIZE;
 	cin >> A_SIZE;
 
-	vector<T> U;
-	vector<T> V;
-	unordered_map<T,vector<T>> adj; // adjs of elems from U
+	// U contains 0 to A_SIZE - 1
+	// V contains A_SIZE - 1 to A_SIZE * 2 - 1
 
-	input(U, V, adj, A_SIZE);
+	vector<vector<int>> adj(A_SIZE);
+	input(adj, A_SIZE);
 
-	const int RESULT = hopcroft_karp();
-	cout << ((A_SIZE == RESULT) ? "Veronique" : "Mark") << endl;
+	for (int i = 0; i < adj.size(); i++) {
+		cerr << i << ": " << adj[i] << endl;
+	}
 
-	// prints the elements 
-	for (auto itr = adj.begin(); itr != adj.end(); itr++) { 
-		cerr << itr->first << '\t' << itr->second << '\n'; 
-	} 
+	//const int RESULT = hopcroft_karp(U, V, adj);
+	//cout << ((A_SIZE == RESULT) ? "Veronique" : "Mark") << endl;
+
 	return 0;
 }
