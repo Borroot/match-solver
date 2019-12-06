@@ -110,6 +110,12 @@ void input (vector<vector<int>> &adj, const int &A_SIZE)
 	}
 }
 
+int hopcroft_karp (vector<vector<int>> &adj)
+{
+
+	return 0;
+}
+
 int main ()
 {
 	int A_SIZE;
@@ -121,12 +127,8 @@ int main ()
 	vector<vector<int>> adj(A_SIZE);
 	input(adj, A_SIZE);
 
-	for (int i = 0; i < adj.size(); i++) {
-		cerr << i << ": " << adj[i] << endl;
-	}
-
-	//const int RESULT = hopcroft_karp(U, V, adj);
-	//cout << ((A_SIZE == RESULT) ? "Veronique" : "Mark") << endl;
+	const int RESULT = hopcroft_karp(adj);
+	cout << ((A_SIZE == RESULT) ? "Veronique" : "Mark") << endl;
 
 	return 0;
 }
