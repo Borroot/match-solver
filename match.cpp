@@ -53,16 +53,6 @@ void init_map (unordered_map<string,int> &map, const int &A_SIZE)
 	}
 }
 
-bool contains (vector<int> &vec, int elem)
-{
-	for (int i = 0; i < (int)vec.size(); i++) {
-		if (vec[i] == elem) {
-			return true;
-		}
-	}
-	return false;
-}
-
 void init_adj (vector<vector<int>> &adj, unordered_map<string,int> &map, const int &A_SIZE)
 {
 	string tmp; cin >> tmp;
@@ -90,9 +80,7 @@ void init_adj (vector<vector<int>> &adj, unordered_map<string,int> &map, const i
 		vector<int> &adj_u = adj[U[u]];
 
 		for (int v = 0; v < (int)V.size(); v++) {
-			if (!contains(adj_u, V[v])) {
-				adj_u.push_back(V[v] - A_SIZE);	
-			}
+			adj_u.push_back(V[v] - A_SIZE);	
 		}
 	}
 }
@@ -107,6 +95,7 @@ void input (vector<vector<int>> &adj, const int &A_SIZE)
 	init_map(map, A_SIZE);
 
 	for (int i = 0; i < M_SIZE; i++) {
+		cerr << i << "-";
 		init_adj(adj, map, A_SIZE);
 	}
 }
@@ -201,8 +190,8 @@ int main ()
 	vector<vector<int>> adj(A_SIZE + 1);
 	input(adj, A_SIZE);
 
-	//const int RESULT = hopcroft_karp(adj, A_SIZE);
-	//cout << ((A_SIZE == RESULT) ? "Mark" : "Veronique") << endl;
+	const int RESULT = hopcroft_karp(adj, A_SIZE);
+	cout << ((A_SIZE == RESULT) ? "Mark" : "Veronique") << endl;
 
 	return 0;
 }
