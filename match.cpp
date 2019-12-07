@@ -91,7 +91,7 @@ void init_adj (vector<vector<int>> &adj, unordered_map<string,int> &map, const i
 
 		for (int v = 0; v < (int)V.size(); v++) {
 			if (!contains(adj_u, V[v])) {
-				adj_u.push_back(V[v]);	
+				adj_u.push_back(V[v] - A_SIZE);	
 			}
 		}
 	}
@@ -138,7 +138,8 @@ bool bfs (vector<int> &pair_U, vector<int> &pair_V, vector<int> &dist, vector<ve
 		Q.pop();
 
 		if (dist[u] < dist[NIL]) {
-			for (int v = 0; v < (int)adj[u].size(); v++) {
+			for (int i = 0; i < (int)adj[u].size(); i++) {
+				int v = adj[u][i];
 				if (dist[pair_V[v]] == INF) {
 					dist[pair_V[v]] = dist[u] + 1;
 					Q.push(pair_V[v]);
@@ -152,7 +153,8 @@ bool bfs (vector<int> &pair_U, vector<int> &pair_V, vector<int> &dist, vector<ve
 bool dfs (const int u, vector<int> &pair_U, vector<int> &pair_V, vector<int> &dist, vector<vector<int>> &adj)
 {
 	if (u != NIL) {
-		for (int v = 0; v < (int)adj[u].size(); v++) {
+		for (int i = 0; i < (int)adj[u].size(); i++) {
+			int v = adj[u][i];
 			if (dist[pair_V[v]] == dist[u] + 1) {
 				if (dfs(pair_V[v], pair_U, pair_V, dist, adj)) {
 					pair_V[v] = u;
@@ -185,7 +187,6 @@ int hopcroft_karp (vector<vector<int>> &adj, const int &A_SIZE)
 			}
 		}
 	}
-
 	return matching;
 }
 
@@ -194,14 +195,14 @@ int main ()
 	int A_SIZE;
 	cin >> A_SIZE;
 
-	// U contains 1 to A_SIZE
-	// V contains A_SIZE to A_SIZE * 2
+	// U contains NIL + 1 to A_SIZE
+	// V contains NIL + 1 to A_SIZE
 
 	vector<vector<int>> adj(A_SIZE + 1);
 	input(adj, A_SIZE);
 
-	const int RESULT = hopcroft_karp(adj, A_SIZE);
-	cout << ((A_SIZE == RESULT) ? "Veronique" : "Mark") << endl;
+	//const int RESULT = hopcroft_karp(adj, A_SIZE);
+	//cout << ((A_SIZE == RESULT) ? "Mark" : "Veronique") << endl;
 
 	return 0;
 }
