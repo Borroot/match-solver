@@ -11,21 +11,6 @@ using namespace std;
 #define NIL 0
 #define INF INT_MAX
 
-// Take a vector and print its contents.
-template <typename T>
-ostream &operator << (ostream &out, vector<T> &A)
-{
-	out << "[";
-	for (int i = 0; i < (int)A.size(); i++) {
-		out << A[i];
-		if (i != (int)A.size() - 1) {
-			out << ",";
-		}
-	}
-	out << "]";
-	return out;
-}
-
 void input_vertices (vector<string> &A)
 {
 	for (int i = 0; i < (int)A.size(); i++) {
@@ -183,9 +168,6 @@ int main ()
 {
 	int A_SIZE;
 	cin >> A_SIZE;
-
-	// U contains NIL + 1 to A_SIZE
-	// V contains NIL + 1 to A_SIZE
 
 	vector<vector<int>> adj(A_SIZE + 1);
 	input(adj, A_SIZE);
