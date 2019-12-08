@@ -80,7 +80,6 @@ void input (vector<vector<int>> &adj, const int &A_SIZE)
 	init_map(map, A_SIZE);
 
 	for (int i = 0; i < M_SIZE; i++) {
-		cerr << i << "-";
 		init_adj(adj, map, A_SIZE);
 	}
 }
@@ -92,7 +91,7 @@ void init_nil (vector<int> vec)
 	}
 }
 
-// Returns true if there is an augmenting path else returns false.
+// Return true if there is an augmenting path else return false.
 bool bfs (vector<int> &pair_U, vector<int> &pair_V, vector<int> &dist, vector<vector<int>> &adj)
 {
 	queue<int> Q;
