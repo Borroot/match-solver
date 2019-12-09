@@ -91,7 +91,6 @@ void init_nil (vector<int> vec)
 	}
 }
 
-// Return true if there is an augmenting path else return false.
 bool bfs (vector<int> &pair_U, vector<int> &pair_V, vector<int> &dist, vector<vector<int>> &adj)
 {
 	queue<int> Q;
